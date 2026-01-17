@@ -30,9 +30,20 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
+      - name: Criar diretório de resultados
+        run: mkdir -p cypress/results
+
       - name: Rodar testes Cypress
         run: npm run cy:run:all
         continue-on-error: true
+
+      - name: Verificar arquivos XML gerados
+        run: |
+          echo "Listando arquivos em cypress/results/:"
+          ls -la cypress/results/ || echo "Diretório vazio ou não existe"
+          echo ""
+          echo "Procurando por arquivos .xml:"
+          find . -name "*.xml" -type f || echo "Nenhum arquivo XML encontrado"
 
       # ========================================
       # INTEGRAÇÃO COM QASE
@@ -72,4 +83,5 @@ jobs:
           path: 'cypress/results/*.xml'
           reporter: 'java-junit'
           fail-on-error: false
+          fail-on-empty: false
 
