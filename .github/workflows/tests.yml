@@ -25,10 +25,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
-      - name: Instalar dependências
-        run: npm install
+      - name: Limpar cache e instalar dependências
+        run: |
+          rm -rf node_modules
+          npm install --legacy-peer-deps
+          echo "Verificando instalação:"
+          ls node_modules | head -20
 
       - name: Criar diretório de resultados
         run: mkdir -p cypress/results

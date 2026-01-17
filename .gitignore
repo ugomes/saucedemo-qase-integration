@@ -4,7 +4,6 @@
 
 # Dependências
 node_modules/
-package-lock.json
 
 # Resultados dos testes
 cypress/results/
