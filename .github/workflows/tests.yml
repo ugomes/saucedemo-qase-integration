@@ -27,21 +27,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Verificar package.json
-        run: cat package.json
-
       - name: Instalar dependências
-        run: |
-          npm install
-          echo "Instalação completa!"
-
-      - name: Verificar node_modules
-        run: |
-          echo "Verificando se dotenv está instalado:"
-          ls -la node_modules/ | grep dotenv || echo "dotenv NÃO encontrado"
-          echo ""
-          echo "Verificando package instalado:"
-          npm list dotenv || echo "dotenv não listado"
+        run: npm install
 
       - name: Criar diretório de resultados
         run: mkdir -p cypress/results
