@@ -66,7 +66,7 @@ jobs:
           QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
           QASE_PROJECT_CODE: ${{ secrets.QASE_PROJECT_CODE || 'SAUCE' }}
           QASE_API_BASE_URL: https://api.qase.io/v1
-          QASE_RUN_TITLE: "GitHub Actions - Node ${{ matrix.node-version }}"
+          QASE_RUN_TITLE: "Automação Cypress - CI/CD Pipeline"
 
       - name: Upload artefatos (Screenshots)
         if: failure()
