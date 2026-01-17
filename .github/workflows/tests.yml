@@ -59,7 +59,7 @@ jobs:
       # para o Qase após os testes
       # ========================================
       - name: Upload resultados para Qase
-        if: always() && secrets.QASE_API_TOKEN != ''
+        if: always()
         run: npm run qase:upload
         continue-on-error: true
         env:
