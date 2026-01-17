@@ -1,0 +1,75 @@
+name: Cypress Tests - Automation Suite
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Roda testes diariamente às 8h da manhã (UTC)
+    - cron: '0 8 * * *'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar testes Cypress
+        run: npm run cy:run:all
+        continue-on-error: true
+
+      # ========================================
+      # INTEGRAÇÃO COM QASE
+      # Faz upload automático dos resultados
+      # para o Qase após os testes
+      # ========================================
+      - name: Upload resultados para Qase
+        if: always()
+        run: npm run qase:upload
+        env:
+          QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
+          QASE_PROJECT_CODE: ${{ secrets.QASE_PROJECT_CODE || 'SAUCE' }}
+          QASE_API_BASE_URL: https://api.qase.io/v1
+          QASE_RUN_TITLE: "GitHub Actions - Node ${{ matrix.node-version }}"
+
+      - name: Upload artefatos (Screenshots)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots-node-${{ matrix.node-version }}
+          path: cypress/screenshots/
+          retention-days: 7
+
+      - name: Upload artefatos (Resultados XML)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-results-node-${{ matrix.node-version }}
+          path: cypress/results/
+          retention-days: 30
+
+      - name: Publicar relatório de testes
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Cypress Test Results - Node ${{ matrix.node-version }}
+          path: 'cypress/results/junit-*.xml'
+          reporter: 'java-junit'
+          fail-on-error: true
+

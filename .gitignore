@@ -1,0 +1,23 @@
+# Variáveis de ambiente (contém tokens sensíveis)
+.env
+.env.local
+
+# Dependências
+node_modules/
+package-lock.json
+
+# Resultados dos testes
+cypress/results/
+cypress/screenshots/
+
+# IDEs e Editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,0 +1,27 @@
+🚀 Automação de Testes - Saucedemo com Cypress e Qase
+
+Suite completa de testes automatizados para o site Saucedemo usando Cypress. Integração automática com Qase para gerenciamento de resultados e CI/CD com GitHub Actions.
+
+✨ Principais Características:
+• 23 testes automatizados (autenticação + inventário)
+• Integração com Qase para relatórios
+• GitHub Actions para CI/CD automático
+• Upload automático de resultados
+• Suporte a múltiplas versões do Node.js
+• Artefatos e screenshots salvos
+
+🎯 Quick Start:
+```bash
+npm install
+npm run cy:open
+```
+
+Para executar com Qase:
+```bash
+npm run test:all:qase
+```
+
+📚 Documentação completa em: README.md
+
+Mantido por: Uelton Gomes
+
