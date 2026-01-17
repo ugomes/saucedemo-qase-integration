@@ -9,6 +9,11 @@ on:
     # Roda testes diariamente às 8h da manhã (UTC)
     - cron: '0 8 * * *'
 
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -54,8 +59,9 @@ jobs:
       # para o Qase após os testes
       # ========================================
       - name: Upload resultados para Qase
-        if: always()
+        if: always() && secrets.QASE_API_TOKEN != ''
         run: npm run qase:upload
+        continue-on-error: true
         env:
           QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
           QASE_PROJECT_CODE: ${{ secrets.QASE_PROJECT_CODE || 'SAUCE' }}
@@ -69,6 +75,7 @@ jobs:
           name: cypress-screenshots-node-${{ matrix.node-version }}
           path: cypress/screenshots/
           retention-days: 7
+          if-no-files-found: ignore
 
       - name: Upload artefatos (Resultados XML)
         if: always()
@@ -77,10 +84,12 @@ jobs:
           name: cypress-results-node-${{ matrix.node-version }}
           path: cypress/results/
           retention-days: 30
+          if-no-files-found: ignore
 
       - name: Publicar relatório de testes
         if: always()
         uses: dorny/test-reporter@v1
+        continue-on-error: true
         with:
           name: Cypress Test Results - Node ${{ matrix.node-version }}
           path: 'cypress/results/*.xml'
