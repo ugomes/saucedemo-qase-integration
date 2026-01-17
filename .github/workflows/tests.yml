@@ -28,7 +28,10 @@ jobs:
           cache: 'npm'
 
       - name: Instalar dependências
-        run: npm ci
+        run: npm install
+
+      - name: Verificar dependências instaladas
+        run: npm list dotenv axios fast-xml-parser
 
       - name: Criar diretório de resultados
         run: mkdir -p cypress/results
